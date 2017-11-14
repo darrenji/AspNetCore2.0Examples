@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using Examples.Extensions;
 
 namespace Examples
 {
@@ -28,9 +29,7 @@ namespace Examples
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.Run(async (context) => {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            app.RunHelloWorld();
         }
 
        
