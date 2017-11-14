@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Examples.Services;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +19,11 @@ namespace Examples.Extensions
             this.next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, IGreetingService greetingService)
         {
-            
-            await context.Response.WriteAsync("hello world from class");
-            await this.next(context);
+
+            var message = greetingService.Greet("darren");
+            await context.Response.WriteAsync(message);
         }
     }
 }

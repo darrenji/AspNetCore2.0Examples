@@ -68,6 +68,11 @@ namespace Examples.Extensions
             //UseMiddleware<T>(param object[])
             return app.UseMiddleware<GreetingMiddleware>(options);
         }
+
+        public static IApplicationBuilder UseGreeting2(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<HelloWorldMiddleware>();
+        }
         #endregion
 
         #region 针对IServiceCollection的扩展方法
