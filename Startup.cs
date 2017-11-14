@@ -30,10 +30,9 @@ namespace Examples
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseGreeting(new GreetingOptions
-            {
-                GreetAt = "morning",
-                GreetTo = "belle"
+            app.UseGreeing1(options => {
+                options.GreetAt = "Eventing";
+                options.GreetTo = "Darren";
             });
         }
 
