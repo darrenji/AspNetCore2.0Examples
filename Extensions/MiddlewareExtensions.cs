@@ -23,5 +23,10 @@ namespace Examples.Extensions
                 await next();
             });
         }
+
+        public static IApplicationBuilder UseHelloWorldInClass(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<HelloWorldMiddleware>();
+        }
     }
 }
