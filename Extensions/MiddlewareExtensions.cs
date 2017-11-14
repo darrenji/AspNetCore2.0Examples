@@ -15,5 +15,13 @@ namespace Examples.Extensions
                 await context.Response.WriteAsync("hello world from extension method");
             });
         }
+
+        public static IApplicationBuilder UseHelloWorld(this IApplicationBuilder app)
+        {
+            return app.Use(async (context, next) => {
+                await context.Response.WriteAsync("hello world using use");
+                await next();
+            });
+        }
     }
 }
