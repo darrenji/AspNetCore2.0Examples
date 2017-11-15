@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Examples.Extensions;
 using Examples.Models;
 using Examples.Services;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace Examples
 {
@@ -34,25 +36,18 @@ namespace Examples
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //前端还有一个TagHelper <environment include="Development"></evironment>
-            //可以在属性-调试中设置ASPNETCORE_ENVIRONMENT变量
-            //根据ASPNETCORE_ENVIRONMENT不同的设置来决定使用哪些中间件，比如在Development的时候使用exception pages有关的中间件，下载不同的Javascript和CSS文件，读出不同的配置
-           if(env.IsDevelopment())
-            {
-                
-            }
-           else if(env.IsStaging())
-            {
+            // 浏览wwwroot
+            app.UseStaticFiles();
 
-            }
-           else if(env.IsProduction())
-            {
+            //浏览content
+            app.UseStaticFiles(new StaticFileOptions() {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "content")),
+                RequestPath=new PathString("/outside-content")
+            });
 
-            }
-           else
-            {
-
-            }
+            app.Run(async (context) => {
+                await context.Response.WriteAsync("hello static files");
+            });
         }
 
        
