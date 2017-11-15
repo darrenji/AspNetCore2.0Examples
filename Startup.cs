@@ -36,18 +36,14 @@ namespace Examples
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            // 浏览wwwroot
-            app.UseStaticFiles();
-
-            //浏览content
-            app.UseStaticFiles(new StaticFileOptions() {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "content")),
-                RequestPath=new PathString("/outside-content")
-            });
-
-            app.Run(async (context) => {
-                await context.Response.WriteAsync("hello static files");
-            });
+            if(env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+            }
         }
 
        
