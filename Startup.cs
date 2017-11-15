@@ -30,13 +30,29 @@ namespace Examples
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddDistributedMemoryCache();
+            services.AddSession(options => {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.Name = "d";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseLogger();
+            app.UseSession();
+            app.Use(async (context, next) => {
+                //数据被存储在IDistributedCache中
+                context.Session.SetString("greet", "hello session state");
+                await next();
+            });
+            app.Run(async (context) => {
+                //通过HttpContext.Session来获取
+                var message = context.Session.GetString("greet");
+                await context.Response.WriteAsync($"{message}");
+            });
         }
 
        
