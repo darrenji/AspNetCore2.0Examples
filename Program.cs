@@ -7,15 +7,40 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Examples.Extensions;
+using Serilog.Events;
 
 namespace Examples
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            //让IWebHost运行
-            BuildWebHost(args).Run();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .CreateLogger();
+
+            try
+            {
+                Log.Information("Starting web host");
+                //让IWebHost运行
+                BuildWebHost(args).Run();
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Host terminated unexpectedly");
+                return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+            
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
@@ -23,7 +48,12 @@ namespace Examples
             //IWebHostBuilder有一个UseSetting方法，用来进行一些基本设置，比如applicationName, contentRoot, detailedErrors, environment, urls, webroot
             //创建IWebHostBuilder的过程，使用到了cross-platform web server Kestrel, 设置根路径，把当前的项目文件设置为根路径
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureLogging((context, builder) => {
+                    builder.AddConsole();
+                    builder.AddDebug();
+                })
                 .UseStartup<Startup>()
+                .UseSerilog()
                 .Build();
     }
 }

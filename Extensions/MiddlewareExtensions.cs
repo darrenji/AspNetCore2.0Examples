@@ -99,5 +99,10 @@ namespace Examples.Extensions
             });
         }
         #endregion
+
+        public static IApplicationBuilder UseLogger(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<HelloLoggingMiddleware>();
+        }
     }
 }
