@@ -14,6 +14,9 @@ using Examples.Services;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Examples
 {
@@ -31,22 +34,33 @@ namespace Examples
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddScoped<IUrlHelper>(factory => {
+                var actionContext = factory.GetService<IActionContextAccessor>().ActionContext;
+                return new UrlHelper(actionContext);
+            });
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            var rewrite = new RewriteOptions()
-                .AddRedirect("films", "movies")
-                .AddRewrite("actors", "stars", true);
+            app.UseDeveloperExceptionPage();
+            app.UseMvc(routes => {
+                //路由名称为goto_one,模板one，来到Home控制器的PageOne下
+                routes.MapRoute(
+                    name: "goto_one",
+                    template: "one",
+                    defaults: new { controller="Home", action="PageOne"});
 
-            app.UseRewriter(rewrite);
+                routes.MapRoute(
+                    name:"goto_two",
+                    template:"two/{id?}",
+                    defaults: new { controller="Home",action="PageTwo"});
 
-            app.Run(async context => {
-                var path = context.Request.Path;
-                var query = context.Request.QueryString;
-                await context.Response.WriteAsync($"new url: {path}{query}");
+                routes.MapRoute(
+                    name:"default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
 
