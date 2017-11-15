@@ -26,7 +26,16 @@ namespace Examples
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IGreetingService, GreetingService>();
+            //所有的ConfigureServices运行在Configure之前
+            //MVC也是中间件
+            //AddScoped()每一次请求产生服务实例
+            //AddTransient()每一个实例都是不一样的
+            //AddSingleton()从第一次请求到最后实例搜是一样的
+            //IServiceCollectioin.AddDbContext背后也用到了AddScoped()
+            //IServiceCollection有关的方法包括：AddDbContext, AddIdentity, AddOptions, AddMvc
+            services.AddScoped<IGreetingService>(factory => {
+                return new FlexibleGreetingService("hi");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
