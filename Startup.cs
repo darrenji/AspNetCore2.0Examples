@@ -13,6 +13,7 @@ using Examples.Models;
 using Examples.Services;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace Examples
 {
@@ -30,13 +31,23 @@ namespace Examples
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseHelloFileProvider();
+            var rewrite = new RewriteOptions()
+                .AddRedirect("films", "movies")
+                .AddRewrite("actors", "stars", true);
+
+            app.UseRewriter(rewrite);
+
+            app.Run(async context => {
+                var path = context.Request.Path;
+                var query = context.Request.QueryString;
+                await context.Response.WriteAsync($"new url: {path}{query}");
+            });
         }
 
        
