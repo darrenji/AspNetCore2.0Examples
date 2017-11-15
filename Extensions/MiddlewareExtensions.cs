@@ -73,6 +73,11 @@ namespace Examples.Extensions
         {
             return app.UseMiddleware<HelloWorldMiddleware>();
         }
+
+        public static IApplicationBuilder UseGreeting3(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<HelloDeveloperMiddleware>();
+        }
         #endregion
 
         #region 针对IServiceCollection的扩展方法
