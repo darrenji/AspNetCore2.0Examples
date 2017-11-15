@@ -44,13 +44,12 @@ namespace Examples
         {
             app.UseSession();
             app.Use(async (context, next) => {
-                //数据被存储在IDistributedCache中
-                context.Session.SetString("greet", "hello session state");
+                context.Session.SetObject("CurrentUser", new UserInfo { Username="James", Email="james@example.com"});
                 await next();
             });
             app.Run(async (context) => {
                 //通过HttpContext.Session来获取
-                var message = context.Session.GetString("greet");
+                var message = context.Session.GetString("CurrentUser");
                 await context.Response.WriteAsync($"{message}");
             });
         }
