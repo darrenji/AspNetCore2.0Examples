@@ -1,5 +1,7 @@
 ﻿using Examples.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,17 +15,19 @@ namespace Examples.Extensions
     public class HelloWorldMiddleware
     {
         private readonly RequestDelegate next;
+        private readonly AppSettings settings;
 
-        public HelloWorldMiddleware(RequestDelegate next)
+        public HelloWorldMiddleware(RequestDelegate next, IOptions<AppSettings> options)
         {
             this.next = next;
+            this.settings = options.Value;
         }
 
-        public async Task Invoke(HttpContext context, IGreetingService greetingService)
+        public async Task Invoke(HttpContext context)
         {
 
-            var message = greetingService.Greet("darren");
-            await context.Response.WriteAsync(message);
+            var jsonsettings = JsonConvert.SerializeObject(this.settings);
+            await context.Response.WriteAsync(jsonsettings);
         }
     }
 }
