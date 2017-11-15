@@ -30,28 +30,13 @@ namespace Examples
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDistributedMemoryCache();
-            services.AddSession(options => {
-                options.Cookie.HttpOnly = true;
-                options.Cookie.Name = "d";
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.IdleTimeout = TimeSpan.FromMinutes(10);
-            });
+            services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseSession();
-            app.Use(async (context, next) => {
-                context.Session.SetObject("CurrentUser", new UserInfo { Username="James", Email="james@example.com"});
-                await next();
-            });
-            app.Run(async (context) => {
-                //通过HttpContext.Session来获取
-                var message = context.Session.GetString("CurrentUser");
-                await context.Response.WriteAsync($"{message}");
-            });
+            app.UseHelloFileProvider();
         }
 
        

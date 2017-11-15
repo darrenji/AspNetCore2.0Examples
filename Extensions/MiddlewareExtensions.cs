@@ -104,5 +104,10 @@ namespace Examples.Extensions
         {
             return app.UseMiddleware<HelloLoggingMiddleware>();
         }
+
+        public static IApplicationBuilder UseHelloFileProvider(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<HelloFileProviderMiddleware>();
+        }
     }
 }
