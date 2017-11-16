@@ -34,12 +34,11 @@ namespace Examples
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            services.AddScoped<IUrlHelper>(factory => {
-                var actionContext = factory.GetService<IActionContextAccessor>().ActionContext;
-                return new UrlHelper(actionContext);
-            });
+
             services.AddMvc();
+
+            //如果想接受XML类型的话
+            services.AddMvc().AddXmlSerializerFormatters();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,19 +46,8 @@ namespace Examples
         {
             app.UseDeveloperExceptionPage();
             app.UseMvc(routes => {
-                //路由名称为goto_one,模板one，来到Home控制器的PageOne下
                 routes.MapRoute(
-                    name: "goto_one",
-                    template: "one",
-                    defaults: new { controller="Home", action="PageOne"});
-
-                routes.MapRoute(
-                    name:"goto_two",
-                    template:"two/{id?}",
-                    defaults: new { controller="Home",action="PageTwo"});
-
-                routes.MapRoute(
-                    name:"default",
+                    name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
