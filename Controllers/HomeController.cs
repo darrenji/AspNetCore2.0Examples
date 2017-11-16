@@ -7,39 +7,29 @@ using Examples.Models;
 
 namespace Examples.Controllers
 {
-    //Routing middleware会把http请求拆分，从template中接受值，保存到RouteData中，然后再把RouteData中的数据与action数据进行绑定
-    //model binding根据惯例，使用反射，绑定过程不抛异常
-    //[BindRequired]如果绑定失败，就添加model state
-    //[BindNever]忽视绑定
-    //[FromHeader]
-    //[FromQuery]
-    //[FromRoute]
-    //[FromForm]
-    //[FromService]
-    //[FromBody]
-    //[ModelBinder]自定义model binder
-    //模型绑定来源的顺序是：Form>Route>Query
+    //模型验证在什么时候发生？在模型绑定之后，在Action真正执行之前
+    //ModelState属性来自ControllerBase
     public class HomeController : Controller
     {
         public IActionResult Index()
         {
-            List<MovieViewModel> model = GetMovies();
-            return View(model);
+            return Content("hello model validation");
         }
 
-        public IActionResult Details(MovieInputModel model)
+        [HttpPost]
+        public IActionResult Save(EmployeeInputModel model)
         {
-            return Content(model.Id);
-        }
-
-        public List<MovieViewModel> GetMovies()
-        {
-            return new List<MovieViewModel>
+            if(model.Id ==1)
             {
-                new MovieViewModel{Id="1", Title="never say never again", ReleaseYear=1983, Summary="it's a summary"},
-                new MovieViewModel{Id="2", Title="diamonds are forever", ReleaseYear=1971, Summary="a diamond sumgggling"},
-                new MovieViewModel{Id="3", Title="you only live twice", ReleaseYear=1967, Summary="agent 007 and the sea"}
-            };
+                ModelState.AddModelError("Id", "Id already exist");
+            }
+
+            if(ModelState.IsValid)
+            {
+                return Ok(model);
+            }
+
+            return BadRequest(ModelState);
         }
     }
 }
