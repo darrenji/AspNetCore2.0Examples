@@ -21,95 +21,25 @@ namespace Examples.Controllers
     //模型绑定来源的顺序是：Form>Route>Query
     public class HomeController : Controller
     {
-        #region simple，来源可以是route, query, form
-        //from route, query, form
-        public IActionResult Simple(int id)
+        public IActionResult Index()
         {
-            return Content($"Simple (id: {id})");
+            List<MovieViewModel> model = GetMovies();
+            return View(model);
         }
 
-        //from query
-        public IActionResult SimpleQuery([FromQuery]int id)
+        public IActionResult Details(MovieInputModel model)
         {
-            return Content($"SimpleQuery (id: {id})");
+            return Content(model.Id);
         }
 
-        //from from
-        public IActionResult SimpleForm([FromForm]int id)
+        public List<MovieViewModel> GetMovies()
         {
-            return Content($"SimpleForm (id: {id})");
+            return new List<MovieViewModel>
+            {
+                new MovieViewModel{Id="1", Title="never say never again", ReleaseYear=1983, Summary="it's a summary"},
+                new MovieViewModel{Id="2", Title="diamonds are forever", ReleaseYear=1971, Summary="a diamond sumgggling"},
+                new MovieViewModel{Id="3", Title="you only live twice", ReleaseYear=1967, Summary="agent 007 and the sea"}
+            };
         }
-
-        //from body
-        public ActionResult SimpleBodyWithoutModel([FromBody]int id)
-        {
-            return Content($"SimpleBodyWthoutModel (id: {id})");
-        }
-
-        //from body get model
-        public IActionResult SimpleBodyWithModel([FromBody]SimpleBodyInputModel model)
-        {
-            return Content($"SimpleBodyWithModel (id: {model.Id})");
-        }
-
-        public IActionResult SimpleHeader([FromHeader]string host, [FromHeader(Name = "User-Agent")]string userAgent)
-        {
-            return Content($"SimpleHeader (host: {host},userAgent: {userAgent})");
-        } 
-        #endregion
-
-        #region complex,来源不可以是route,可以是query, form
-        //complex from query, form
-        public IActionResult Complex(GreetingInputModel model)
-        {
-            return Content($"Complex (type: {model.Type}, to: {model.To})");
-        }
-
-        //complex from query
-        public IActionResult ComplexQuery([FromQuery]GreetingInputModel model)
-        {
-            return Content($"ComplexQuery (type: {model.Type}, to: {model.To})");
-        }
-
-        //complext from form
-        public IActionResult ComplexForm([FromForm]GreetingInputModel model)
-        {
-            return Content($"ComplexForm (type: {model.Type}, to: {model.To})");
-        }
-
-        //complex from body
-        public IActionResult ComplexBody([FromBody]GreetingInputModel model)
-        {
-            return Content($"ComplexBody (type: {model.Type}, to: {model.To})");
-        }
-
-        //complex from header
-        public IActionResult ComplexHeader([FromHeader]GreetingInputModel model)
-        {
-            return Content($"ComplexHeader (type: {model.Type}, to: {model.To})");
-        }
-        #endregion
-
-        #region collections
-        //collection from query
-        public IActionResult Collection(IEnumerable<string> values)
-        {
-            return Content($"Collection (count: {values.Count()})");
-        }
-
-        //collecton from body
-        public IActionResult CollectionComplex([FromBody]CollectionInputModel model)
-        {
-            return Content($"CollectionComplex (count: {model.values.Count()})");
-        }
-        #endregion
-
-        #region from multiple sources
-        //from route, query
-        public IActionResult Multiple(int id)
-        {
-            return Content($"Multiple: {id}");
-        }
-        #endregion
     }
 }

@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Examples.Lib;
 
 namespace Examples
 {
@@ -34,22 +35,20 @@ namespace Examples
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDataProtection();
+            services.AddMvc(options => {
+                options.ModelBinderProviders.Insert(0, new ProtectedIdModelBinderProvider());
+                options.Filters.Add(typeof(ProtectedIdResultFilter));
+            });
 
-            services.AddMvc();
-
-            //如果想接受XML类型的话
-            services.AddMvc().AddXmlSerializerFormatters();
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseDeveloperExceptionPage();
-            app.UseMvc(routes => {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvcWithDefaultRoute();
         }
 
        

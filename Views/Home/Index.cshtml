@@ -1,0 +1,13 @@
+﻿@using Examples.Models
+@model List<MovieViewModel>
+
+<h3>Home</h3>
+<ul>
+    @foreach(var item in Model)
+    {
+        <li>
+            <a asp-action="Details" asp-route-id="@item.Id">@item.Title (@item.Id)</a>
+        </li>
+
+    }
+</ul>
