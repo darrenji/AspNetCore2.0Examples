@@ -1,19 +1,72 @@
-﻿@using Examples.Models
-@model EmployeeInputModel
+﻿@{ 
+    var birthDate = new DateTime(1930, 8, 25);
+}
 
-<h2>Asp.net core mvc client validation</h2>
+<strong>Hello Mvc Razor</strong>
 
-<form asp-controller="Home" asp-action="Index"  method="post">
-    <div asp-validation-summary="All"></div>
+<p>James Bond, you were born @birthDate.ToString("dd-MMM-yyyy")</p>
 
-    <label asp-for="EmployeeNo"></label>
-    <input type="text"  asp-for="EmployeeNo" />
-    <span asp-validation-for="EmployeeNo"></span>
+<p>James Bond is about @((DateTime.Now-birthDate).Days / 365) years old</p>
 
-    <br />
-    <button type="submit">Save</button>
-</form>
+<p>@("<strong>Hello World</strong>")</p> 
 
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
-<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
-<script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+<p>@Html.Raw("<strong>mames@bond.com</strong>")</p>
+
+@{ 
+    var isHungry = true;
+    var gender = 0;
+    IEnumerable<string> friends = new[] { "Thor", "tohm", "Iron"};
+    var tech = "asp.net mvc";
+    var count = tech.Count();
+}
+
+@if (isHungry)
+{
+    <p>I'm hungry</p>
+
+}else {
+    <p>I'm fine</p>
+}
+
+@switch (gender)
+{
+    case 0:
+        <p>Male</p>
+        break;
+    case 1:
+        <p>Female</p>
+        break;
+    default:
+        break;
+}
+
+@for(int i=0; i<tech.Length; i++)
+{
+    <text>@tech[i].ToString().ToUpper()</text>
+
+}
+
+<ul>
+    @foreach(var item in friends)
+    {
+        <li>@item</li>
+
+    }
+</ul>
+
+@do
+{
+    <text>@tech[count - 1].ToString().ToUpper()</text>
+    count -= 1;
+} while (count > 0);
+
+@try
+{
+    var a = 1;
+    var b = 0;
+    var result = a / b;
+}
+catch(Exception ex)
+{
+    <p>@ex.Message</p>
+}

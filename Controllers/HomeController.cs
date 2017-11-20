@@ -17,29 +17,15 @@ namespace Examples.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Index(EmployeeInputModel model)
+        public IActionResult AboutMe()
         {
-            if (!ModelState.IsValid)
+            var model = new AboutViewModel
             {
-                return View(model);
-            }
-            //把对象转换成json字符串
-            var json = JsonConvert.SerializeObject(model);
-            return Content(json);
-             
+                Firstname = "Darren",
+                Surname = "Ji"
+            };
+            return View("Bio", model);
         }
-
-        public IActionResult ValidateEmployeeNo(string employeeNo)
-        {
-            if (employeeNo == "007")
-            {
-                return Json(data: "007 is already assigned to James Bond!");
-            }
-            return Json(data: true);
-        }
-
 
     }
 }
