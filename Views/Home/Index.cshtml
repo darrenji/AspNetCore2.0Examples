@@ -1,13 +1,19 @@
 ﻿@using Examples.Models
-@model List<MovieViewModel>
+@model EmployeeInputModel
 
-<h3>Home</h3>
-<ul>
-    @foreach(var item in Model)
-    {
-        <li>
-            <a asp-action="Details" asp-route-id="@item.Id">@item.Title (@item.Id)</a>
-        </li>
+<h2>Asp.net core mvc client validation</h2>
 
-    }
-</ul>
+<form asp-controller="Home" asp-action="Index"  method="post">
+    <div asp-validation-summary="All"></div>
+
+    <label asp-for="EmployeeNo"></label>
+    <input type="text"  asp-for="EmployeeNo" />
+    <span asp-validation-for="EmployeeNo"></span>
+
+    <br />
+    <button type="submit">Save</button>
+</form>
+
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>

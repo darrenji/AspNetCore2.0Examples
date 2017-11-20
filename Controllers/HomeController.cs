@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Examples.Models;
+using Newtonsoft.Json;
 
 namespace Examples.Controllers
 {
@@ -13,23 +14,32 @@ namespace Examples.Controllers
     {
         public IActionResult Index()
         {
-            return Content("hello model validation");
+            return View();
         }
 
         [HttpPost]
-        public IActionResult Save(EmployeeInputModel model)
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(EmployeeInputModel model)
         {
-            if(model.Id ==1)
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("Id", "Id already exist");
+                return View(model);
             }
-
-            if(ModelState.IsValid)
-            {
-                return Ok(model);
-            }
-
-            return BadRequest(ModelState);
+            //把对象转换成json字符串
+            var json = JsonConvert.SerializeObject(model);
+            return Content(json);
+             
         }
+
+        public IActionResult ValidateEmployeeNo(string employeeNo)
+        {
+            if (employeeNo == "007")
+            {
+                return Json(data: "007 is already assigned to James Bond!");
+            }
+            return Json(data: true);
+        }
+
+
     }
 }
