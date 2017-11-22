@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Examples.Models.Home;
+
 
 namespace Examples
 {
@@ -33,7 +33,6 @@ namespace Examples
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IAddressFormatter, AddressFormatter>();
             services.AddMvc();
            
         }
@@ -42,8 +41,16 @@ namespace Examples
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseDeveloperExceptionPage();
-            app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc(routes => {
+                routes.MapRoute(
+                    name: "namedRoute",
+                    template: "call-named-route/{id?}",
+                    defaults: new { controller="Home", action="NamedRoute"});
+
+                routes.MapRoute(
+                    name:"default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
 
        
