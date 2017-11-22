@@ -14,12 +14,21 @@ namespace Examples.Controllers
     {
         public IActionResult Index()
         {
-            var model = new UserViewModel
+            var model = new EmployeeViewModel
             {
-                Firstname = "darren",
-                Username = "ji"
+                Id = 1,
+                Firstname = "Darren",
+                Address = new AddressViewModel
+                {
+                    Line1 = "LIN1",
+                    Line2 = "LIN2",
+                    Line3 = "LIN3"
+                }
+
             };
+
             return View(model);
+
         }
     }
 }

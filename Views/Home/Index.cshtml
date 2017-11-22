@@ -1,19 +1,12 @@
-﻿@using Examples.Services
+﻿
 @using Examples.Models
-@model UserViewModel
-@inject IGreetingService Greeting
+@model EmployeeViewModel
 
-@{ 
-    ViewBag.Title = "ASP.NET Core MVC";
-}
+<div style="border:1px solid black;margin:5px">
+    <h2>employee detais(parent view)</h2>
 
-<h2>i'm in the view page</h2>
-<p>@Greeting.Greet(Model.Firstname, Model.Username)</p>
+    <p>firstname: @Model.Firstname</p>
+    <p>Surname: @Model.Surname</p>
 
-@section footer {
-    <h3>footer from index page</h3>
-}
-
-@section links {
-    <a href="#">link form index page</a>
-}
+    @Html.Partial("_Address.cshtml", Model.Address)
+</div>
