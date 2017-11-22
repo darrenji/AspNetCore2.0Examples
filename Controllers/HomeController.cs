@@ -14,7 +14,12 @@ namespace Examples.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            var model = new UserViewModel
+            {
+                Firstname = "darren",
+                Username = "ji"
+            };
+            return View(model);
         }
     }
 }

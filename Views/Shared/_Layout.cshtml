@@ -1,0 +1,24 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div>
+        <div>
+            <h1>I'm in layout page</h1>
+            @RenderBody()
+            @RenderSection("footer", required:false)
+            @if(IsSectionDefined("links"))
+            {
+                @RenderSection("links", required:false)
+
+            }
+            else
+            {
+                <em>No social meida links supplied</em>
+
+            }
+        </div>
+    </div>
+</body>
+</html>

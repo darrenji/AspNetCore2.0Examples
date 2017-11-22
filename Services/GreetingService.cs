@@ -7,9 +7,9 @@ namespace Examples.Services
 {
     public class GreetingService : IGreetingService
     {
-        public string Greet(string to)
+        public string Greet(string firstname, string username)
         {
-            return $"Hello {to}";
+            return $"Hello {firstname} {username}";
         }
     }
 }

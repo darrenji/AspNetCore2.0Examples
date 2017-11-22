@@ -1,11 +1,19 @@
 ﻿@using Examples.Services
-@inject ILookupService Lookup
+@using Examples.Models
+@model UserViewModel
+@inject IGreetingService Greeting
 
-<select name="genres">
-    <option value="-1">--Select Genre--</option>
-    @foreach(var item in Lookup.Genres)
-    {
-        <option value="@item.Value">@item.Text</option>
+@{ 
+    ViewBag.Title = "ASP.NET Core MVC";
+}
 
-    }
-</select>
+<h2>i'm in the view page</h2>
+<p>@Greeting.Greet(Model.Firstname, Model.Username)</p>
+
+@section footer {
+    <h3>footer from index page</h3>
+}
+
+@section links {
+    <a href="#">link form index page</a>
+}

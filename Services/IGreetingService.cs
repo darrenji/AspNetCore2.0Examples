@@ -7,6 +7,6 @@ namespace Examples.Services
 {
     public interface IGreetingService
     {
-        string Greet(string to);
+        string Greet(string firstname, string username);
     }
 }

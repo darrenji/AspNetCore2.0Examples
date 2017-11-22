@@ -19,11 +19,11 @@ namespace Examples.Extensions
             this.next = next;
         }
 
-        public async Task Invoke(HttpContext context)
-        {
-            var greetingService = (IGreetingService)context.RequestServices.GetService(typeof(IGreetingService));
-            var message = greetingService.Greet("developers");
-            await context.Response.WriteAsync(message);
-        }
+        //public async Task Invoke(HttpContext context)
+        //{
+        //    var greetingService = (IGreetingService)context.RequestServices.GetService(typeof(IGreetingService));
+        //    var message = greetingService.Greet("developers");
+        //    await context.Response.WriteAsync(message);
+        //}
     }
 }
