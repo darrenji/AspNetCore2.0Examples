@@ -1,12 +1,14 @@
-﻿
-@using Examples.Models
+﻿@using Examples.Models.Home
 @model EmployeeViewModel
 
 <div style="border:1px solid black;margin:5px">
-    <h2>employee detais(parent view)</h2>
+    <h2>Employee Details(view)</h2>
 
-    <p>firstname: @Model.Firstname</p>
-    <p>Surname: @Model.Surname</p>
+    <p>Id: @Model.Id</p>
+    <p>Firstname: @Model.Firstname</p>
+    <p>Surname:@Model.Surname</p>
 
-    @Html.Partial("_Address.cshtml", Model.Address)
+    @await Component.InvokeAsync("Address", new { employeeId = Model.Id})
 </div>
+
+@await Component.InvokeAsync("UserInfo")

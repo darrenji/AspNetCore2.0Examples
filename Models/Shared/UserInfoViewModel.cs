@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Examples.Models
+namespace Examples.Models.Shared
 {
-    public class UserViewModel
+    public class UserInfoViewModel
     {
-        public string Firstname { get; set; }
         public string Username { get; set; }
-
+        public string LastLogin { get; set; }
     }
 }
