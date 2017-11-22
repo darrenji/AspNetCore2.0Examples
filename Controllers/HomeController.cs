@@ -16,16 +16,5 @@ namespace Examples.Controllers
         {
             return View();
         }
-
-        public IActionResult AboutMe()
-        {
-            var model = new AboutViewModel
-            {
-                Firstname = "Darren",
-                Surname = "Ji"
-            };
-            return View("Bio", model);
-        }
-
     }
 }
