@@ -12,36 +12,63 @@ namespace Examples.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: /<controller>/
         public IActionResult Index()
         {
-            var model = new EmployeeViewModel
-            {
-                Id=5
+            return View();
+        }
+
+        public IActionResult Employees()
+        {
+            var model = new EmployeesViewModel {
+                Employees = new List<Employee> {
+                    new Employee
+                    {
+                        Name="darren",
+                        JobTitle="ceo",
+                        Profile="excellent",
+                        Friends=new List<Friend>
+                        {
+                            new Friend{Name="tom"},
+                            new Friend{ Name="dick"},
+                            new Friend{ Name="harry"}
+                        }
+                    },
+                    new Employee{
+                        Name="james",
+                        JobTitle="ceo",
+                        Profile="good",
+                        Friends=new List<Friend>
+                        {
+                            new Friend{Name="james gordon"},
+                            new Friend{Name="robin hood"}
+                        }
+                    }
+                }
             };
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Index(EmployeeViewModel model)
+        public IActionResult Movie()
         {
-            if(!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var json = JsonConvert.SerializeObject(model);
-            return Content(json);
+            var model = new MovieViewModel {
+                Title ="diamonds",
+                ReleaseYear="1971",
+                Director="guy",
+                Summary="pretty good",
+                Starts = new List<string> { "sean", "jill st"}
+            };
+            return View(model);
         }
 
-        public IActionResult Echo(int id)
+        public IActionResult Context()
         {
-            return Content(id.ToString());
+            ViewBag.Greeting = "hello from view bag";
+            return View();
         }
 
-        public IActionResult NamedRoute(int id)
+        public IActionResult Greet()
         {
-            return Content(id.ToString());
+            return View();
         }
     }
 }
