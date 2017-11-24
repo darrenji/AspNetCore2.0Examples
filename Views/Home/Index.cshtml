@@ -1,1 +1,9 @@
-﻿<p>Hello Custom Tag Helpers</p>
+﻿<p>
+    Current Time: @DateTime.Now.ToString("hh:mm:ss")
+</p>
+
+<p>
+    <distributed-cache name="one" expires-after="@TimeSpan.FromMinutes(1)">
+        Cached Time: @DateTime.Now.ToString("hh:mm:ss")
+    </distributed-cache>
+</p>
