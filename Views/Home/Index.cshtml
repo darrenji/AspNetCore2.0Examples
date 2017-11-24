@@ -1,9 +1,20 @@
-﻿<p>
-    Current Time: @DateTime.Now.ToString("hh:mm:ss")
-</p>
+﻿
+@{
+    Layout = null;
+}
 
-<p>
-    <distributed-cache name="one" expires-after="@TimeSpan.FromMinutes(1)">
-        Cached Time: @DateTime.Now.ToString("hh:mm:ss")
-    </distributed-cache>
-</p>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <main>
+        TagHelperComponent
+    </main>
+
+    <footer></footer>
+</body>
+</html>

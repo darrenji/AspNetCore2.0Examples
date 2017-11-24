@@ -14,7 +14,8 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
-
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Examples.Lib;
 
 namespace Examples
 {
@@ -32,9 +33,9 @@ namespace Examples
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDistributedRedisCache(options => {
-                options.Configuration = "...";
-            });
+            services.AddSingleton<ITagHelperComponent, MetaTagHelperComponent>();
+            services.AddSingleton<ITagHelperComponent, ScriptsTagHelperComponent>();
+            services.AddSingleton<ITagHelperComponent, FooterTagHelperComponent>();
             services.AddMvc();
            
         }
@@ -43,6 +44,7 @@ namespace Examples
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseDeveloperExceptionPage();
+            app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
         }
 
