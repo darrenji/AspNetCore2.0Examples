@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Examples.Lib;
 
 namespace Examples
 {
@@ -33,9 +32,7 @@ namespace Examples
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ITagHelperComponent, MetaTagHelperComponent>();
-            services.AddSingleton<ITagHelperComponent, ScriptsTagHelperComponent>();
-            services.AddSingleton<ITagHelperComponent, FooterTagHelperComponent>();
+            services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
             services.AddMvc();
            
         }
