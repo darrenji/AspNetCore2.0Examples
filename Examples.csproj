@@ -21,7 +21,7 @@
   <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Lib\" />
-    <Folder Include="Services\" />
+    <Folder Include="Models\" />
     <Folder Include="TagHelpers\" />
   </ItemGroup>
 

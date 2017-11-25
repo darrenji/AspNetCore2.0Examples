@@ -7,7 +7,8 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using Examples.Models;
+using Examples.Filters;
+
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,127 +16,52 @@ namespace Examples.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IFileProvider fileProvider;
 
-        public HomeController(IFileProvider fileProvider)
-        {
-            this.fileProvider = fileProvider;
-        }
         public IActionResult Index()
         {
             return View();
         }
 
-        //使用IFormFile接受前端传来的文件
-        [HttpPost]
-        public async Task<IActionResult> UploadFile(IFormFile file)
+        #region Action Filters
+        [SkipActionFilter]
+        public IActionResult SkipAction()
         {
-            //检查文件是否存在，是否有内容
-            if(file==null||file.Length==0)
-            {
-                return Content("file not selected");
-            }
-
-            //文件的保存路径
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", file.GetFilename());
-
-            //把流搭建起来
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                //把文件保存到流里
-                await file.CopyToAsync(stream);
-            }
-            return RedirectToAction("Files");
+            return Content("Home/SkipAction");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UploadFiles(List<IFormFile> files) 
+        [ParseParameterFilter]
+        public IActionResult ParseParameter(string param)
         {
-            if(files==null || files.Count == 0)
-            {
-                return Content("files not selected");
-            }
+            return Content($"Home/ParseParameter, param:{param}");
+        }
+        #endregion
 
-            foreach(var file in files)
-            {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", file.GetFilename());
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-            }
-            return RedirectToAction("Files");
+        #region Result Filters
+        [SkipResultFilter]
+        public IActionResult SkipResult()
+        {
+            return Content("Home/SkipResult");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UploadFileViaModel(FileInputModel model)
+        [AddVersionResultFilter("ASP.NET Core MVC 2.0")]
+        public IActionResult AddVersion()
         {
-            if(model==null || model.FileToUpload == null || model.FileToUpload.Length == 0)
-            {
-                return Content("file not selected");
-            }
+            return Content("Home/AddVersion");
+        }
+        #endregion
 
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", model.FileToUpload.GetFilename());
-
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                await model.FileToUpload.CopyToAsync(stream);
-            }
-            return RedirectToAction("Files");
+        #region Type Filters
+        [TypeFilter(typeof(GreetingTypeFilter))]
+        public IActionResult GreetType1(string param)
+        {
+            return Content($"Hello/GreetType1, param:{param}");
         }
 
-        public IActionResult Files()
+        [GreetingTypeFilterWrapper]
+        public IActionResult GreetType2(string param)
         {
-            var model = new FilesViewModel();
-            foreach(var item in this.fileProvider.GetDirectoryContents(""))
-            {
-                model.Files.Add(new FileDetails { Name=item.Name, Path=item.PhysicalPath});
-            }
-            return View(model);
+            return Content($"Home/GreetType2,, param:{param}");
         }
-
-        public async Task<IActionResult> Download(string filename)
-        {
-            if(filename==null)
-            {
-                return Content("filename not present");
-
-            }
-
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filename);
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
-            {
-                await stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
-            return File(memory, GetContentType(path), Path.GetFileName(path));
-        }
-
-        private string GetContentType(string path)
-        {
-            var types = GetMimeTypes();
-            var ext = Path.GetExtension(path).ToLowerInvariant();
-            return types[ext];
-        }
-
-        private Dictionary<string, string> GetMimeTypes()
-        {
-            return new Dictionary<string, string>
-            {
-                {".txt", "text/plain"},
-                {".pdf", "application/pdf"},
-                {".doc", "application/vnd.ms-word"},
-                {".docx", "application/vnd.ms-word"},
-                {".xls", "application/vnd.ms-excel"},
-                {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
-                {".png", "image/png"},
-                {".jpg", "image/jpeg"},
-                {".jpeg", "image/jpeg"},
-                {".gif", "image/gif"},
-                {".csv", "text/csv"}
-            };
-        }
-
+        #endregion
     }
 }

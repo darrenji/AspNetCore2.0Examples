@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Examples.Services;
+using Examples.Filters;
 
 namespace Examples
 {
@@ -32,8 +34,13 @@ namespace Examples
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
-            services.AddMvc();
+            services.AddScoped<IGreetingService, GreetingService>();
+            //GreetingServiceFilter是实现IActionFilter接口的一个类，在这里全局注册
+            services.AddScoped<GreetingServiceFilter>();
+            services.AddMvc(options => {
+                options.Filters.Add(new AddDeveloperResultFilter("darren"));
+                options.Filters.Add(typeof(GreetDeveloperResultFilter));
+            });
            
         }
 
