@@ -1,0 +1,25 @@
+﻿@page
+@model CreateModel
+@{
+}
+
+<h2>New Movie</h2>
+
+<form method="post">
+    <div asp-validation-summary="All"></div>
+
+    <label asp-for="Movie.Id"></label>
+    <input asp-for="Movie.Id" /><br />
+
+    <label asp-for="Movie.Title"></label>
+    <input asp-for="Movie.Title" /><br />
+
+    <label asp-for="Movie.ReleaseYear"></label>
+    <input asp-for="Movie.ReleaseYear" /><br />
+
+    <label asp-for="Movie.Summary"></label>
+    <input asp-for="Movie.Summary" /><br />
+
+    <button type="submit">Save</button>
+    <a asp-page="./Index">Cancel</a>
+</form>
